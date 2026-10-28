@@ -1,59 +1,106 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Gestion de parking
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application web de gestion des entrées et sorties d'un parking. Elle permet de suivre les véhicules présents, de calculer le montant dû à la sortie et de consulter l'historique des stationnements.
 
-## About Laravel
+## Fonctionnalités
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Enregistrer l'entrée d'une voiture ou d'une moto et générer un ticket.
+- Rechercher un véhicule à sa sortie par immatriculation ou numéro de ticket.
+- Calculer la durée facturée par heure commencée, avec un minimum d'une heure.
+- Calculer le tarif selon le type de véhicule : **500 Ar/heure** pour une voiture et **200 Ar/heure** pour une moto.
+- Consulter les véhicules actuellement garés et l'historique des sorties.
+- Afficher sur la page d'accueil le nombre de véhicules garés, les sorties et les revenus du jour, ainsi que le nombre total de véhicules.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+L'interface et les messages sont en français. Les données des stationnements sont conservées dans la base de données.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Technologies
 
-## Learning Laravel
+- **Serveur :** PHP 8.2+, Laravel 12
+- **Base de données par défaut :** SQLite
+- **Interface :** Blade, Bootstrap 5 et Font Awesome
+- **Assets :** Vite, Tailwind CSS 4 et JavaScript
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Prérequis
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP **8.2 ou supérieur**, avec les extensions nécessaires à Laravel et au pilote SQLite (`pdo_sqlite`).
+- [Composer](https://getcomposer.org/)
+- Node.js et npm
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Depuis le dossier du projet :
 
-### Premium Partners
+```bash
+composer install
+npm install
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Créez ensuite le fichier SQLite, générez la clé de l'application et lancez les migrations :
 
-## Contributing
+```bash
+touch database/database.sqlite
+php artisan key:generate
+php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Enfin, compilez les assets et démarrez l'application :
 
-## Code of Conduct
+```bash
+npm run build
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Ouvrez [http://localhost:8000](http://localhost:8000) dans votre navigateur.
 
-## Security Vulnerabilities
+Pour le développement avec rechargement des assets et les outils Laravel associés, utilisez plutôt :
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer run dev
+```
 
-## License
+Cette commande démarre le serveur Laravel, Vite, le worker de file d'attente et le suivi des journaux. Elle nécessite les dépendances Composer et npm installées.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Base de données
+
+La configuration fournie utilise SQLite et le fichier `database/database.sqlite`. Pour utiliser MySQL ou un autre moteur pris en charge par Laravel, configurez les variables `DB_*` dans `.env`, puis exécutez les migrations.
+
+## Parcours disponibles
+
+| Page | URL | Description |
+| --- | --- | --- |
+| Accueil | `/` | Indicateurs du parking et accès aux opérations |
+| Nouvelle entrée | `/entree` | Enregistrement d'une voiture ou d'une moto |
+| Sortie | `/sortie` | Recherche du véhicule et enregistrement de son départ |
+| Véhicules garés | `/gares` | Liste des véhicules actuellement présents |
+| Historique | `/historique` | Liste paginée des véhicules sortis |
+
+Un véhicule déjà enregistré comme garé ne peut pas être enregistré une seconde fois. Le numéro de ticket généré suit le format `PARK-0001`.
+
+## Structure du projet
+
+```text
+app/
+  Http/Controllers/VehicleController.php  Parcours des véhicules et calcul des montants
+  Models/                                  Modèles Eloquent
+database/
+  migrations/                              Schéma de la base de données
+resources/views/
+  Home.blade.php                           Tableau de bord
+  vehicles/                                Écrans d'entrée, de sortie et de suivi
+routes/Web.php                             Routes de l'application
+```
+
+Le parcours opérationnel de l'interface repose sur le modèle `Vehicle`. Le projet contient également des modèles et migrations pour les clients, les parkings, les places, les abonnements et les tickets ; ces entités constituent une base de données complémentaire, mais ne sont pas encore intégrées aux parcours actuels de l'interface.
+
+## Tests
+
+Exécutez la suite de tests Laravel avec :
+
+```bash
+php artisan test
+```
+
+## Licence
+
+La licence du projet n'est pas précisée dans le dépôt. Les dépendances conservent leurs licences respectives.
